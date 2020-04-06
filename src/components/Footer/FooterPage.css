@@ -1,0 +1,51 @@
+#footer {
+
+  background-color: black; 
+  margin-top: 12%;
+ 
+    /* Footer height */
+}
+
+#footer .logo img{
+  width: .5em;
+  float: left;
+  }
+
+  
+  #footer .logo a{
+  color: #82b340;
+  }
+
+  #footer .logo {
+    padding-bottom: 2%;
+    }
+  
+  .foot-col-1 {
+  width: 30%;
+  display: inline-block;
+  margin-left: 5%;
+  padding: 1%;
+  color: white;
+  line-height: 1.5em;
+  }
+
+  .foot-col-2 li{
+    padding: 3%;
+  }
+  
+  .foot-col-2 {
+  width: 18%;
+  display: inline-block;
+  color: white;
+  margin-left: 30%;
+  }
+  
+  .foot-col-2  h4{
+  text-decoration: underline;
+  }
+  
+ 
+  
+  
+  
+  
