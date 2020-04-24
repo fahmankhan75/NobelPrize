@@ -8,8 +8,17 @@
 .nobelInformation h2{
     text-decoration: underline;
 }
+
 .nobelInformation{
     margin-top: 1%;
     margin-left: 17%;
     max-width: 70%;
+}
+
+.nobelInformation p{
+    line-height: 150%;
+}
+
+.aboutFooter{
+    margin-top: 21%;
 }

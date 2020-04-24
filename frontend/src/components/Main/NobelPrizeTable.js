@@ -20,7 +20,6 @@ import Switch from '@material-ui/core/Switch';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import axios from 'axios';
 
-const rows = [];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -116,7 +115,8 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
   title: {
     flex: '1 1 100%',
-    marginTop: 30
+    marginTop: 30,
+    textAlign: 'center',
   },
 }));
 
@@ -181,36 +181,59 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NobelPrizeTable() 
+export default function NobelPrizeTable(props) 
 {
+  let year = props.year;
+  let category = props.category;
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [nobelPrizes, setNobelPrizes] = React.useState([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rows, setRows] = React.useState([]);
   const baseUrl = "http://localhost:5000/winners";
   const axiosConfig = {headers: {
     'Access-Control-Allow-Origin': '*',
           }};
 
-  React.useEffect(()=>{
-    axios.get(baseUrl, axiosConfig)
-    .then(res =>{
-      var nobelArray = res['data'];
-      for(var i = 0; i < nobelArray.length; i++) {
-        var obj = nobelArray[i];
-    
-        console.log(obj);
-        break;
+  React.useEffect(() => {
+    const fetchData = async () => 
+    {
+      const result = await axios( baseUrl,);
+      let nobelPrizesArray = [];
+      let tempPrizes =result.data.map(item=>{
+        let tempYear = item[0];
+        let tempCategory = item[1];
+        let personInfo = item[2].map(item=> {
+          let array =[];
+          let year = tempYear;
+          let category = tempCategory;
+          let firstname = item.firstname;
+          let surname = item.surname;
+          let motivation = item.motivation;
+          array = {year, category,firstname,surname, motivation};
+          nobelPrizesArray.push(array);
+        });
+    });
+    //Filter out rows by year
+    if(year!=null)
+        nobelPrizesArray =nobelPrizesArray.filter(item =>{
+      return item.year ===year
+      });
+    if(category!='All')
+    {
+        nobelPrizesArray =nobelPrizesArray.filter(item =>{
+        return item.category === category.toLowerCase();
+        });
     }
+    setRows(nobelPrizesArray);
+    };
+    //fetch data from API
+    console.log(props);
+    fetchData();
 
-    })
-    .catch(err =>{
-        console.log('message');
-    })
-  });
+  }, []);
 
 
 
@@ -235,7 +258,6 @@ export default function NobelPrizeTable()
   };
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
   return (
     <div>
       <div className={classes.root}>
@@ -259,18 +281,17 @@ export default function NobelPrizeTable()
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                .map((row) => {
 
                   return (
                     <TableRow>
-                      <TableCell component="th" id={labelId} scope="row" align="center">
-                        {row.name}
+                      <TableCell component="th" scope="row" align="center">
+                        {row.year}
                       </TableCell>
-                      <TableCell align="center" >{row.calories}</TableCell>
-                      <TableCell align="center">{row.fat}</TableCell>
-                      <TableCell align="center">{row.carbs}</TableCell>
-                      <TableCell align="center">{row.protein}</TableCell>
+                      <TableCell align="center" >{row.category}</TableCell>
+                      <TableCell align="center">{row.firstname}</TableCell>
+                      <TableCell align="center">{row.surname}</TableCell>
+                      <TableCell align="center">{row.motivation}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -283,7 +304,7 @@ export default function NobelPrizeTable()
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

@@ -1,5 +1,6 @@
 import React from "react";
 import './FooterPage.css';
+import {Link} from "react-router-dom";
 
 const FooterPage = () => {
   return (
@@ -8,9 +9,15 @@ const FooterPage = () => {
         <div className="foot-col-2">
                 <h3>Navigation</h3>
                 <ul className="navLinks">
-                    <li><a className="nav-link active" href="#">Search</a></li>
-                    <li><a className="nav-link" href="#">Nobel Prize Directory</a></li>
-                    <li><a className="nav-link" href="#">About</a></li>
+                  <Link to="/">
+                    <li className="nav-link">Search</li>
+                  </Link>
+                  <Link to="/directory">
+                    <li className="nav-link">Nobel Prize Directory</li>
+                  </Link>
+                  <Link to="/about">
+                    <li className="nav-link">About</li>
+                  </Link>
                 </ul>
             </div>
             <div className="foot-col-1">

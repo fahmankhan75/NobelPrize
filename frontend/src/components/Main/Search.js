@@ -7,6 +7,8 @@ import Select from '@material-ui/core/Select';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import {makeStyles} from '@material-ui/core/styles';
+import {Link} from 'react-router-dom';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -66,10 +68,13 @@ const useStyles = makeStyles((theme) => ({
 export default function TextFieldSizes() {
   const classes = useStyles();
   const [category, setCategory] = React.useState('All');
+  const [year, setYear] = React.useState('2020');
 
+  const handleYear = (event) => {
+    setYear(event.target.value);  
+  };
 
-  const handleChange = (event) => {
-    console.log(event.target.value);
+  const handleCategory = (event) => {
     setCategory(event.target.value);
   };
 
@@ -77,13 +82,14 @@ export default function TextFieldSizes() {
     <div>
       <h3 className={classes.searchTitle}>Search Nobel Prize Info</h3>
       <TextField
-          defaultValue="2019"
           helperText="Select Year"
+          value={year}
           className={classes.yearTextComp}
           variant='outlined'
           InputProps={{
             className: classes.yearInput,
         }}
+          onChange={handleYear}
         ></TextField>
       <br></br>
     <FormControl className={classes.formControl}>
@@ -91,7 +97,7 @@ export default function TextFieldSizes() {
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={category}
-          onChange={handleChange}>
+          onChange={handleCategory}>
         <MenuItem value={'All'}>All</MenuItem>
         <MenuItem value={'Chemistry'}>Chemistry</MenuItem>
         <MenuItem value={'Economics'}>Economics</MenuItem>
@@ -108,8 +114,10 @@ export default function TextFieldSizes() {
           className={classes.formButton}
           InputProps={{
             className: classes.formButton
-        }}>
-        Search
+        }}
+          >
+                    <Link 
+                  to={`/directory/${year}/${category}`}>Search</Link>
       </Button>
     </FormControl>
 
